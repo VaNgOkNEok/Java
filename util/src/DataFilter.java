@@ -15,15 +15,27 @@ public class DataFilter {
         return typeStatistics;
     }
 
+    private boolean doesContainProhibitedSign(String line) {
+        return line.matches(".*[<>:/\\\\|?*\"].*");
+    }
+
+    private boolean isOption(String line) {
+        return line.matches("-[a-zA-Z]+");
+    }
+
     public DataFilter(String[] inputString) {
         for (int i = 0; i < inputString.length; i++) {
             if (inputString[i].equals("-o") && i + 1 < inputString.length) {
-                if (inputString[i + 1].matches("-[a-zA-Z]+")) continue;
+                if (isOption(inputString[i + 1])) continue;
                 outputFilesDirectory = Paths.get(inputString[++i]);
                 continue;
             }
             if (inputString[i].equals("-p") && i + 1 < inputString.length) {
-                prefix = inputString[++i];
+                if (doesContainProhibitedSign(inputString[i + 1])) {
+                    i++;
+                } else {
+                    prefix = inputString[++i];
+                }
                 continue;
             }
             if (inputString[i].equals("-a")) {
@@ -38,7 +50,7 @@ public class DataFilter {
                 typeStatistics = StatisticsType.FULL;
                 continue;
             }
-            if (inputString[i].matches("-[a-zA-Z]+")) {
+            if (isOption(inputString[i])) {
                 System.err.println("Warning: Unrecognized character: " + inputString[i]);
                 continue;
             }
