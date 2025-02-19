@@ -38,12 +38,16 @@
 
 -Простой запуск:
 >java X:\JAVA\util\src\Main.java X:\JAVA\in1.txt X:\JAVA\in2.txt
+
 -Вывод в указанную директорию:
 >java X:\JAVA\util\src\Main.java -o output/ X:\JAVA\in1.txt X:\JAVA\in2.txt
+
 -Добавление данных в существующие файлы с префиксом:
 >java X:\JAVA\util\src\Main.java -o output/ -a -p filtered_ X:\JAVA\in1.txt X:\JAVA\in2.txt
+
 -Полная статистика:
 >java X:\JAVA\util\src\Main.java -o output/ -a -f -p filtered_ X:\JAVA\in1.txt X:\JAVA\in2.txt
+
 -------------------------------------------------------------------------------------------------------
 📌 Обработка ошибок:
 
