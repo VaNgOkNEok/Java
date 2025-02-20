@@ -8,7 +8,7 @@ public class DataFilter {
     private StatisticsType typeStatistics = StatisticsType.NONE;
     private String prefix = "";
     private Path outputFilesDirectory = null;
-    private List<String> nameFiles = new LinkedList<>();
+    private List<String> nameFiles;
     private Statistics statistics;
 
     public StatisticsType getTypeStatistics()    {
@@ -23,7 +23,13 @@ public class DataFilter {
         return line.matches("-[a-zA-Z]+");
     }
 
+    private boolean isStatisticsEnabled() {
+        return typeStatistics != StatisticsType.NONE;
+    }
+
     public DataFilter(String[] inputString) {
+        nameFiles = new LinkedList<>();
+
         for (int i = 0; i < inputString.length; i++) {
             if (inputString[i].equals("-o") && i + 1 < inputString.length) {
                 if (isOption(inputString[i + 1])) continue;
@@ -56,6 +62,11 @@ public class DataFilter {
             }
             nameFiles.add(inputString[i]);
         }
+
+        if (isStatisticsEnabled()) {
+            statistics = new Statistics(this);
+            statistics.initializationOfStaticsParameters();
+        }
     }
 
     private Path getOutputFilePath(String fileName) {
@@ -87,16 +98,7 @@ public class DataFilter {
                 Files.newBufferedWriter(outputFilePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
-    private boolean isStatisticsEnabled() {
-        return typeStatistics != StatisticsType.NONE;
-    }
-
     public void filter() throws IOException {
-
-        if (isStatisticsEnabled()) {
-            statistics = new Statistics(this);
-            statistics.initializationOfStaticsParameters();
-        }
 
         BufferedWriter bwf = null;
         BufferedWriter bws = null;
